@@ -1,4 +1,5 @@
 from serializer import deserialize, is_serialized, token
+import time
 import csv
 
 
@@ -24,14 +25,14 @@ def interceptor(d: bytes, a_src: list) -> bytes:
             else:
                 row = [a_src[0], "", data[1].decode()]
 
-            print(row)
+            print(f"{a_src[0]}:{a_src[1]} >", row)
 
             with open("auth.log", "a") as f:
                 wr = csv.writer(f, quoting=csv.QUOTE_ALL)
                 wr.writerow(row)
 
-        print(d[:50])
-        with open(f"payload_{a_src[0]}:{a_src[1]}.log", "ab") as f:
+        print(f"{a_src[0]}:{a_src[1]} >", d[:50])
+        with open(f"payload_{a_src[0]}:{a_src[1]}_{int(time.time())}.log", "ab") as f:
             f.write(d)
 
     except Exception as e:
